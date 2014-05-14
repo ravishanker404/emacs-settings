@@ -1,0 +1,5 @@
+(defun insert-ipdb()
+  (interactive)
+  (insert "import ipdb;ipdb.set_trace()"))
+(global-unset-key (kbd "C-c ;"))
+(global-set-key (kbd "C-c ;") 'insert-ipdb)
