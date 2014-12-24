@@ -1,5 +1,11 @@
 (defun insert-ipdb()
   (interactive)
   (insert "import ipdb;ipdb.set_trace()"))
-(global-unset-key (kbd "C-c ;"))
-(global-set-key (kbd "C-c ;") 'insert-ipdb)
+(global-unset-key (kbd "C-x ;"))
+(global-set-key (kbd "C-x ;") 'insert-ipdb)
+
+(defun insert-python-file-encoding()
+  (interactive)
+  (insert "# -*- coding: utf-8 -*-"))
+(global-unset-key (kbd "C-x C-:"))
+(global-set-key (kbd "C-x C-:") 'insert-python-file-encoding)

@@ -1,7 +1,6 @@
 ;;Editor settings
 (global-linum-mode 1)
 (scroll-bar-mode 0)
-(auto-save-mode 0)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (add-hook 'before-save-hook (lambda () (delete-trailing-whitespace)))
@@ -11,6 +10,8 @@
 
 ;; magitshortcut
 (global-set-key (kbd "C-x g") 'magit-status)
+
+(global-set-key (kbd "C-x l") 'goto-line)
 
 ;;Toggle comment and uncomment
 ;; Original idea from  http://www.opensubscriber.com/message/emacs-devel@gnu.org/10971693.html
@@ -53,9 +54,50 @@ comment at the end of the line."
 
 (defun after-init-hook-hook ()
   (load-theme 'monokai)
+  ;; (load-theme 'zenburn)
   (add-hook 'python-mode-hook 'jedi:setup)
   (setq jedi:complete-on-dot t)
 )
 
 
 (toggle-frame-fullscreen)
+
+(require 'multiple-cursors)
+;; (global-unset-key (kbd "M-<down-mouse-1>"))
+;; (global-set-key (kbd "M-<mouse-1>") 'mc/add-cursor-on-click)
+
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+(auto-save-mode -1)
+(add-to-list 'auto-mode-alist (cons (rx ".js" eos) 'js2-mode))
+
+
+
+;; OPEN NEW LINE
+(defun open-next-line (arg)
+  "Move to the next line and then opens a line.
+    See also `newline-and-indent'."
+  (interactive "p")
+  (end-of-line)
+  (open-line arg)
+  (next-line 1)
+  (when newline-and-indent
+    (indent-according-to-mode)))
+(global-set-key (kbd "C-o") 'open-next-line)
+;; Behave like vi's O command
+(defun open-previous-line (arg)
+  "Open a new line before the current one.
+     See also `newline-and-indent'."
+  (interactive "p")
+  (beginning-of-line)
+  (open-line arg)
+  (when newline-and-indent
+    (indent-according-to-mode)))
+(global-set-key (kbd "M-o") 'open-previous-line)
+(defvar newline-and-indent t
+  "Modify the behavior of the open-*-line functions to cause them to
+autoindent.")
+
+(provide 'open-next-line)
